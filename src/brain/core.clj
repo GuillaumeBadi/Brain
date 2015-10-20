@@ -69,6 +69,9 @@
 (defn -main
   []
     (let [tree (build-tree :number)
-          function (build-function tree)]
-          (println (pretty-tree tree))
+          function (build-function tree)
+          x 1]
+          (-> tree pretty-tree println)
+          (println "With x" x)
+          (println (function x))
           ))
