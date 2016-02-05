@@ -105,39 +105,42 @@
                       return-type)]
     (iterate evolution population)))
 
-;; Init a genetic algorithm problem:
-
-(def input (range 10))
-(def output (map #(* (+ 2 %) %) input))
-
-(defn abs [n] (max n (- n)))
-
-(defn score [got expected]
-  (* -1 (abs (- expected got))))
-
-(defn my-fitness
-  [function]
-  (let [got (map function input)]
-    (let [vector (map #(score %2 %1) output got)]
-      (apply + vector))))
-
-(def gen (init  my-fitness
-                numbers/gen-number
-                [numbers/gen-number 'x]
-                1000
-                2))
-
 (defn run
+  "Takes a lazy-seq of evolving populations
+   and recur until depth is 0 or the goal has been reached"
   [genome depth]
   (let [population (first genome)
         evaluation (evaluate population (make-fitness [numbers/gen-number 'x] my-fitness))]
-    ; (println "Generation" depth)
     (println (map first (reverse (sort-by first evaluation))))
     (if (or
           (> 1 depth)
           (= 0 (first (map first evaluation))))
         (first population)
         (run (rest genome) (dec depth)))))
+
+;; Init a genetic algorithm problem:
+
+;; Define the inputs
+(def input (range 10))
+
+;; define the coresponding outputs
+(def output (map #(* (+ 2 %) %) input))
+
+;; define a fitness function. The better the program the higher the score.
+;; Cannot go over 0 (shoul it?)
+(defn my-fitness
+  [function]
+  (let [got (map function input)]
+    (let [vector (map #(utils/score %2 %1) output got)]
+      (apply + vector))))
+
+;; Defines the environment
+;; returns a lazy sequence of populations
+(def gen (init  my-fitness
+                numbers/gen-number
+                [numbers/gen-number 'x]
+                1000
+                2))
 
 (defn -main
   []
