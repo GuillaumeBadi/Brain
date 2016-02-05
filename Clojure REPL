@@ -1,0 +1,97 @@
+;; This is a text editor and also a Clojure REPL.  It behaves differently than a typical Clojure REPL. You can type anywhere and modify any of the displayed text. Commands are not sent by typing in the REPL and pressing enter. They are sent through keyboard shortcuts.
+
+ ;; REPL Execution Keybindings
+ ;; Note: These keybindings can be executed from any file and the results will be displayed in this REPL.
+ ;; The keybindings are almost all of the form ctrl + comma, release, and then another key.
+ ;; See the settings for more keybindings.
+
+ ;; ctrl-, then b - execute block. Finds the block of Clojure code your cursor is in and executes that.
+
+ ;; Try it now. Put your cursor inside this block and press ctrl and comma together,
+ ;; release, then press b.
+ (+ 2 3)
+
+ ;; ctrl-, s - Executes the selection. Sends the selected text to the REPL.
+
+ ;; Try it now. Select these three lines and press ctrl and comma together,
+ ;; release, then press s.
+ (println "hello 1")
+ (println "hello 2")
+ (println "hello 3")
+
+ ;; You can disable this help text in the settings.
+;; Loading REPL...
+WARNING: concat already refers to: #'clojure.core/concat in namespace: brain.core, being replaced by: #'brain.core/concat
+Starting evolution...
+#error {
+ :cause nth not supported on this type: Long
+ :via
+ [{:type clojure.lang.Compiler$CompilerException
+   :message java.lang.UnsupportedOperationException: nth not supported on this type: Long, compiling:(brain/core.clj:211:1)
+   :at [clojure.lang.Compiler load Compiler.java 7239]}
+  {:type java.lang.UnsupportedOperationException
+   :message nth not supported on this type: Long
+   :at [clojure.lang.RT nthFrom RT.java 933]}]
+ :trace
+ [[clojure.lang.RT nthFrom RT.java 933]
+  [clojure.lang.RT nth RT.java 883]
+  [brain.core$error$fn__91 invoke core.clj 159]
+  [clojure.core$map$fn__4553 invoke core.clj 2622]
+  [clojure.lang.LazySeq sval LazySeq.java 40]
+  [clojure.lang.LazySeq seq LazySeq.java 49]
+  [clojure.lang.RT seq RT.java 507]
+  [clojure.core$seq__4128 invoke core.clj 137]
+  [clojure.core.protocols$seq_reduce invoke protocols.clj 26]
+  [clojure.core.protocols$fn__6506 invoke protocols.clj 100]
+  [clojure.core.protocols$fn__6452$G__6447__6465 invoke protocols.clj 13]
+  [clojure.core$reduce invoke core.clj 6515]
+  [brain.core$error invoke core.clj 159]
+  [brain.core$sort_by_error$fn__102 invoke core.clj 169]
+  [clojure.core$map$fn__4553 invoke core.clj 2624]
+  [clojure.lang.LazySeq sval LazySeq.java 40]
+  [clojure.lang.LazySeq seq LazySeq.java 49]
+  [clojure.lang.RT seq RT.java 507]
+  [clojure.core$seq__4128 invoke core.clj 137]
+  [clojure.core$sort invoke core.clj 2981]
+  [brain.core$sort_by_error invoke core.clj 168]
+  [brain.core$evolve invoke core.clj 188]
+  [brain.core$_main invoke core.clj 209]
+  [brain.core$eval121 invoke core.clj 211]
+  [clojure.lang.Compiler eval Compiler.java 6782]
+  [clojure.lang.Compiler load Compiler.java 7227]
+  [clojure.lang.RT loadResourceScript RT.java 371]
+  [clojure.lang.RT loadResourceScript RT.java 362]
+  [clojure.lang.RT load RT.java 446]
+  [clojure.lang.RT load RT.java 412]
+  [clojure.core$load$fn__5448 invoke core.clj 5866]
+  [clojure.core$load doInvoke core.clj 5865]
+  [clojure.lang.RestFn invoke RestFn.java 408]
+  [clojure.core$load_one invoke core.clj 5671]
+  [clojure.core$load_lib$fn__5397 invoke core.clj 5711]
+  [clojure.core$load_lib doInvoke core.clj 5710]
+  [clojure.lang.RestFn applyTo RestFn.java 142]
+  [clojure.core$apply invoke core.clj 632]
+  [clojure.core$load_libs doInvoke core.clj 5749]
+  [clojure.lang.RestFn applyTo RestFn.java 137]
+  [clojure.core$apply invoke core.clj 632]
+  [clojure.core$require doInvoke core.clj 5832]
+  [clojure.lang.RestFn invoke RestFn.java 408]
+  [user$eval5 invoke form-init4412261610819311566.clj 1]
+  [clojure.lang.Compiler eval Compiler.java 6782]
+  [clojure.lang.Compiler eval Compiler.java 6771]
+  [clojure.lang.Compiler eval Compiler.java 6771]
+  [clojure.lang.Compiler load Compiler.java 7227]
+  [clojure.lang.Compiler loadFile Compiler.java 7165]
+  [clojure.main$load_script invoke main.clj 275]
+  [clojure.main$init_opt invoke main.clj 280]
+  [clojure.main$initialize invoke main.clj 308]
+  [clojure.main$null_opt invoke main.clj 343]
+  [clojure.main$main doInvoke main.clj 421]
+  [clojure.lang.RestFn invoke RestFn.java 421]
+  [clojure.lang.Var invoke Var.java 383]
+  [clojure.lang.AFn applyToHelper AFn.java 156]
+  [clojure.lang.Var applyTo Var.java 700]
+  [clojure.main main main.java 37]]}
+nREPL server started on port 61204 on host 127.0.0.1 - nrepl://127.0.0.1:61204
+
+user=> 
