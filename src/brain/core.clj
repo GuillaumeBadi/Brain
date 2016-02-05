@@ -22,7 +22,7 @@
   (let [evaluation (evaluate population fitness)]
     (map second (reverse (sort-by first evaluation)))))
 
-(defn select2
+(defn select
   "Tournament Selection.
    Selects some random individuals and keep the best one"
   [pop fitness tournament-size]
@@ -30,21 +30,11 @@
     (nth pop
          (apply max (repeatedly tournament-size #(rand-int size))))))
 
-
-(defn select
- "Tournament Selection.
-  Selects some random individuals and keep the best one"
- [pop fitness tournament-size]
- (let [size (count (take tournament-size pop))]
-   (nth pop
-        (apply max (repeatedly tournament-size #(rand-int size))))))
-
-
 (defn mutate-population
   "Mutate a whole population based on a return-type
    and a mutation rate"
   ([params return-type population]
-   (mutate-population params population return-type 0.3))
+   (mutate-population params population return-type 0.5))
   ([params population return-type rate]
    (cons (first population)
          (map #(if (< (rand) rate)
@@ -52,6 +42,7 @@
                    %)
               (drop-last population)))))
 
+;; with elite selection
 (defn new-population
   "Returns a new population containing
    the best individual from the previous
@@ -61,10 +52,10 @@
   (let [size (count pop)
         elite-count (* 1/4 size)
         mutant-count (* 3/4 size)
-        tournament-size 10]
+        tournament-size 50]
     (let [elite (take elite-count pop)
           mutants (repeatedly mutant-count
-                              #(tree/mutate params (rand-nth elite) return-type))] 
+                              #(tree/mutate params (rand-nth elite) return-type))]
         (concat elite mutants))))
 
 
@@ -107,7 +98,8 @@
 (def input (range 10))
 
 ;; define the coresponding outputs
-(def output (map #(* (+ 2 %) %) input))
+;; 2xx + 5x + x
+(def output (map #(+ (* % % 2) (* % 5)) input))
 
 ;; define a fitness function. The better the program the higher the score.
 ;; Cannot go over 0 (shoul it?)
@@ -122,8 +114,8 @@
 (def gen (init  my-fitness
                 numbers/gen-number
                 [numbers/gen-number 'x]
-                250
-                3))
+                150
+                5))
 
 (defn run
   "Takes a lazy-seq of evolving populations
@@ -131,7 +123,7 @@
   [genome depth]
   (let [population (first genome)
         evaluation (evaluate population (make-fitness [numbers/gen-number 'x] my-fitness))]
-    (println (map first (reverse (sort-by first evaluation))))
+    (println (first (map first (reverse (sort-by first evaluation)))))
     (if (or
           (> 1 depth)
           (= 0 (first (map first evaluation))))
