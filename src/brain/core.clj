@@ -44,10 +44,10 @@
   "Mutate a whole population based on a return-type
    and a mutation rate"
   ([params return-type population]
-   (mutate-population params population return-type 0.5))
+   (mutate-population params population return-type 0.3))
   ([params population return-type rate]
    (cons (first population)
-         (map #(if (> (rand) rate)
+         (map #(if (< (rand) rate)
                    (tree/mutate params % return-type)
                    %)
               (drop-last population)))))
@@ -62,15 +62,11 @@
         elite-count (* 1/4 size)
         mutant-count (* 3/4 size)
         tournament-size 10]
-    (let [select1 (repeatedly mutant-count
-                              #(select pop fitness tournament-size))
-          select2 (repeatedly (- elite-count 1)
-                              #(select pop fitness tournament-size))]
-      (cons
-        (first pop)
-        (concat
-          select1
-          select2)))))
+    (let [elite (take elite-count pop)
+          mutants (repeatedly mutant-count
+                              #(tree/mutate params (rand-nth elite) return-type))] 
+        (concat elite mutants))))
+
 
 (defn evolve
   "Make one evolution iteration.
@@ -78,7 +74,7 @@
   [params population fitness return-type]
   (->> population
        (sort-by-fitness fitness)
-       (mutate-population params return-type)
+      ;  (mutate-population params return-type)
        (sort-by-fitness fitness)
        (new-population params return-type fitness)
        (sort-by-fitness fitness)))
@@ -105,19 +101,6 @@
                       return-type)]
     (iterate evolution population)))
 
-(defn run
-  "Takes a lazy-seq of evolving populations
-   and recur until depth is 0 or the goal has been reached"
-  [genome depth]
-  (let [population (first genome)
-        evaluation (evaluate population (make-fitness [numbers/gen-number 'x] my-fitness))]
-    (println (map first (reverse (sort-by first evaluation))))
-    (if (or
-          (> 1 depth)
-          (= 0 (first (map first evaluation))))
-        (first population)
-        (run (rest genome) (dec depth)))))
-
 ;; Init a genetic algorithm problem:
 
 ;; Define the inputs
@@ -139,8 +122,22 @@
 (def gen (init  my-fitness
                 numbers/gen-number
                 [numbers/gen-number 'x]
-                1000
-                2))
+                250
+                3))
+
+(defn run
+  "Takes a lazy-seq of evolving populations
+   and recur until depth is 0 or the goal has been reached"
+  [genome depth]
+  (let [population (first genome)
+        evaluation (evaluate population (make-fitness [numbers/gen-number 'x] my-fitness))]
+    (println (map first (reverse (sort-by first evaluation))))
+    (if (or
+          (> 1 depth)
+          (= 0 (first (map first evaluation))))
+        (first population)
+        (run (rest genome) (dec depth)))))
+
 
 (defn -main
   []
